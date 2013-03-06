@@ -64,4 +64,18 @@ describe 'Delayed Events Queue', ->
       setTimeout (->
         event_storage.should.not.have.property 4
         done()), 20
+        
+  it 'should support absolute times', (done) ->
+    tick = new Date().getTime()
+    de2.addEventAtTime tick+50, 'complete', 5
+    callbacks.complete = (data) ->
+      tock = new Date().getTime()
+      (tock-tick).should.be.within 35, 65
+      data.should.equal 5
+      done()
       
+  it 'should return the number of pending events', (done) ->
+    de2.addEventAtTime new Date().getTime() + 12345667, 'complete', 6
+    de2.addEventAtTime new Date().getTime() + 33333333, 'complete', 7
+    de2.getPendingEventCount().should.equal 2
+    done()
