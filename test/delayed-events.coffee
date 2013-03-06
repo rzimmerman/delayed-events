@@ -4,8 +4,9 @@ should = require 'should'
 firstEventFired = 0
 callbacks =
   complete: ->
-  initial: ->
+  initial: (data, next) ->
     firstEventFired += 1
+    next()
 event_storage = 
   1:{data:1,functionName:'initial', time: new Date().getTime()}
   2:{data:2,functionName:'complete', time: new Date().getTime() + 1000000}

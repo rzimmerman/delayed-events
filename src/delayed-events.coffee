@@ -24,11 +24,16 @@ module.exports = (options) ->
     queue.splice bisect(x), 0, x
   
   processEvent = (event) ->
-    if callbacks[event.functionName]?
-      callbacks[event.functionName] event.data
+    eventFunction = callbacks[event.functionName]
+    if eventFunction?
+      if eventFunction.length > 1 #check if it takes a callback
+        eventFunction event.data, (err) ->
+          storage.clearDelayedEvent? event unless err
+      else
+        eventFunction event.data
+        storage.clearDelayedEvent? event
     else
       console.log "delayed-events: could not find function #{event.functionName}"
-    storage.clearDelayedEvent? event
   
   tick = ->
     currentIndex = bisect time: new Date().getTime()

@@ -5,7 +5,7 @@
   },
   "contributors": ["Robert Zimmerman <rmzimmerman@gmail.com> (www.rmzimmerman.com)"],
   "name": "delayed-events",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A delayed events queue for scheduling events in the future with an optional save/restore feature.",
   "keywords": ["delay", "schedule", "event", "queue"],
   "bugs": {

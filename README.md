@@ -26,7 +26,8 @@ Example (without save/resume):
     var eventQueue = require('delayed-events')({callbacks: model, timeInterval: 500});
     
     eventQueue.addEvent(1000,"sendEmail","rob@example.com");
-    
+
+Note that if your event callback functions accept two arguments, the second is treated as a callback. This is only useful when you are using using save/resume and you want to make sure your function completes before removing it from the data store (see save/resume for details).
 
 ### eventQueue methods
 
@@ -99,6 +100,8 @@ Delete the delayed event from the data store. The user can use the event.time an
         //use event.data and/or event.time to remove event from your data store
     }
 
+Note that if your event functions take a callback as a second parameter, this function will only get called if your event function calls back with `null` or `undefined`. This way a triggered event that fails will be marked but not cleared.
+
 #### addDelayedEvent
 
 Add a delayed event to the data store. The user can use the event.time and event.data properties to create a unique ID. No callbacks are used.
@@ -141,8 +144,9 @@ A mongoskin-like example:
     }
     
     var eventFunctions = {
-        sendEmail: function (eventData) {
+        sendEmail: function (eventData, next) {
             console.log('Sent email to', eventData.emailAddress);
+            next(); //could pass an error here as next(new Error()); to prevent calling of clearDelayedEvent
         }
     }
     
