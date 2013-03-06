@@ -1,7 +1,7 @@
 {
   "scripts": {
     "prepublish": "cake build",
-    "test": "./node_modules/.bin/mocha -c -R spec --compilers coffee:coffee-script test"
+    "test": "./node_modules/.bin/mocha -c -R spec --compilers coffee:./node_modules/coffee-script test"
   },
   "contributors": ["Robert Zimmerman <rmzimmerman@gmail.com> (www.rmzimmerman.com)"],
   "name": "delayed-events",
