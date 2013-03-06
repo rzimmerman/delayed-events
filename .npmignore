@@ -1,5 +1,6 @@
-# This project
-*.js
+src
+Cakefile
+.gitignore
 node_modules
 logfile.json
 *.log
