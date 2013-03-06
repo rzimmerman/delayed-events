@@ -3,7 +3,10 @@
 #
 # a simple delayed event queue with fault recovery
 
-module.exports = (callbacks, storage, tickInterval) ->
+module.exports = (options) ->
+  callbacks = options?.callbacks or {}
+  storage = options?.storage or {}
+  
   queue = []
   
   bisect = (x) ->
@@ -25,7 +28,7 @@ module.exports = (callbacks, storage, tickInterval) ->
       callbacks[event.functionName] event.data
     else
       console.log "delayed-events: could not find function #{event.functionName}"
-    storage?.clearDelayedEvent? event
+    storage.clearDelayedEvent? event
   
   tick = ->
     currentIndex = bisect time: new Date().getTime()
@@ -34,7 +37,7 @@ module.exports = (callbacks, storage, tickInterval) ->
       cb = ->
         processEvent queue[index]
         index += 1
-      if storage?.markDelayedEvent?
+      if storage.markDelayedEvent?
         storage.markDelayedEvent queue[index], cb
       else
         cb()
@@ -42,7 +45,7 @@ module.exports = (callbacks, storage, tickInterval) ->
     queue.splice 0, currentIndex
   
   addEventToQueue = (event) ->
-    storage?.addDelayedEvent? event
+    storage.addDelayedEvent? event
     insort event
   
   instance =
@@ -53,12 +56,12 @@ module.exports = (callbacks, storage, tickInterval) ->
     getPendingEventCount: ->
       return queue.length
     restore: ->
-      storage?.getDelayedEvents? (events) ->
+      storage.getDelayedEvents? (events) ->
         queue = queue.concat events
         queue.sort (x, y) -> x.time > y.time
     close: ->
       clearInterval timer
   
-  timer = setInterval tick, tickInterval or 10000
+  timer = setInterval tick, options?.tickInterval or 10000
   
   return instance

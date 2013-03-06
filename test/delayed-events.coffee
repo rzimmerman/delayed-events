@@ -26,8 +26,8 @@ de2 = null
 
 describe 'Delayed Events Queue', ->
   before ->
-    de1 = require('../src/delayed-events')(callbacks, mock_storage, 10)
-    de2 = require('../src/delayed-events')(callbacks, null, 10)
+    de1 = require('../src/delayed-events')(callbacks:callbacks, storage:mock_storage, tickInterval:10)
+    de2 = require('../src/delayed-events')(callbacks:callbacks, tickInterval:10)
     
   after ->
     de1.close()
