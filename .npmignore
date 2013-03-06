@@ -1,4 +1,5 @@
 src
+test
 Cakefile
 .gitignore
 node_modules
