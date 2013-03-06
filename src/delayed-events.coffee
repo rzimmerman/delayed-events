@@ -18,7 +18,7 @@ module.exports = (callbacks, storage, tickInterval) ->
     return lo
   
   insort = (x) ->
-    queue.splice bisect(queue, x), 0, x
+    queue.splice bisect(x), 0, x
   
   processEvent = (event) ->
     if callbacks[event.functionName]?
@@ -31,9 +31,14 @@ module.exports = (callbacks, storage, tickInterval) ->
     currentIndex = bisect time: new Date().getTime()
     index = 0
     while index < currentIndex
-      storage?.markDelayedEvent? event
-      processEvent queue[index]
-      index += 1
+      cb = ->
+        processEvent queue[index]
+        index += 1
+      if storage?.markDelayedEvent?
+        storage.markDelayedEvent queue[index], cb
+      else
+        cb()
+      
     queue.splice 0, currentIndex
   
   addEventToQueue = (event) ->
