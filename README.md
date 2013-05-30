@@ -1,6 +1,6 @@
 # Delayed Events
 
-Keeps and event queue and calls back after the requested delay. This module supports writing events to storage and refreshing them in case of a server outage.
+delayed-events is an event queue that calls back after the requested delay. It's useful for things like servers that need to perform an action a set amount of time after a request has finished. This module optionally supports writing events to storage and refreshing them in case of a server outage.
 
 ## Usage
 
